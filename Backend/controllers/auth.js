@@ -44,7 +44,7 @@ exports.postLogin = (req, res, next) => {
           //adding tokens for authorizing user for the session
           const token = jwt.sign(
             { email: found.email, userId: found._id.toString() },
-            "secretforever",
+            "<'your secret code here>",
             { expiresIn: "1h" }
           );
           res.status(200).json({token : token,userId : found._id.toString()})

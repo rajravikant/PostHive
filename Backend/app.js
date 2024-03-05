@@ -6,7 +6,7 @@ const feedRoutes = require('./routes/feed')
 const authRoutes = require('./routes/auth')
 
 const mongoose = require('mongoose')
-const URI = 'mongodb+srv://ravikantraj:9zbjp31uv1feHVwg@cluster0.noy8uoe.mongodb.net/blogApp?retryWrites=true&w=majority&appName=Cluster0'
+const URI = '<your mongobo connection string'
 
 const app = express();
 
