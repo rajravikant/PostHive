@@ -19,7 +19,7 @@ Currently project is on early development so it has some bugs and less secure. B
 ## API Reference
 #### All the api endpoints are defined in backend directory
 
-```http
+```
  /feed/posts 
  /feed/posts',feedController.getPosts
  /feed/posts/:userId',feedController.getUsersPost
