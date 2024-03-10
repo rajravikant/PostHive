@@ -20,18 +20,15 @@ Currently project is on early development so it has some bugs and less secure. B
 #### All the api endpoints are defined in backend directory
 
 ```http
-GET /feed/posts 
-GET /feed/posts',feedController.getPosts
-GET /feed/posts/:userId',feedController.getUsersPost
-GET /feed/post/:postID',feedController.getSinglePost
-GET /feed/user',isAuth,feedController.getUser
- 
-```
-```http
-router.post('/post',isAuth,feedController.putPost);
-router.put('/post/:postID',isAuth,feedController.updatePost)
-router.delete('/post/:postID',isAuth,feedController.deletePost)
-router.patch('/user',isAuth,feedController.updateUser) 
+ /feed/posts 
+ /feed/posts',feedController.getPosts
+ /feed/posts/:userId',feedController.getUsersPost
+ /feed/post/:postID',feedController.getSinglePost
+ /feed/user',isAuth,feedController.getUser
+ /post,isAuth,feedController.putPost
+ /post/:postID',isAuth,feedController.updatePost
+ /post/:postID',isAuth,feedController.deletePost
+ /user',isAuth,feedController.updateUser 
 ```
 
 ## Run Locally
