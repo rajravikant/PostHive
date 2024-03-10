@@ -1,4 +1,5 @@
 {
+  "proxy": "http://localhost:8080",
   "name": "my-blog",
   "private": true,
   "version": "0.0.0",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
+    "axios": "^1.6.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-loader-spinner": "^6.1.6",

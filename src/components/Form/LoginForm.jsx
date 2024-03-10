@@ -20,33 +20,35 @@ const LoginForm = () => {
       <div className="mb-5">
         <label
           htmlFor="email"
-          className="block mb-2 text-sm font-medium text-gray-600"
+          className="block mb-2 text-sm font-medium text-gray-600 dark:text-[#EEEEEE]"
         >
           Email
         </label>
         <input
           type="email"
           id="email" name="email"
-          className="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none"
+          className="inputs"
+          required
         />
       </div>
       <div className="mb-5">
         <label
           htmlFor="password"
-          className="block mb-2 text-sm font-medium text-gray-600"
+          className="block mb-2 text-sm font-medium text-gray-600 dark:text-[#EEEEEE]"
         >
           Password
         </label>
         <input
           type="password"
           id="password" name="password"
-          className="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none"
+          className="inputs"
+          required
         />
       </div>
-      {data && isVisble && <p className="text-red-500"> {data.message}</p>}
+      {/* {data && isVisble && <p className="text-red-500"> {data}</p>} */}
       <button
         type="submit"
-        className="w-full p-3 mt-4 bg-indigo-600 text-white rounded shadow"
+        className="w-full p-3 mt-4 bg-primary text-white rounded shadow"
       >
         {isSubmitted ? 'Logging In' : 'Login'}
       </button>

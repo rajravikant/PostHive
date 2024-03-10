@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link,useNavigate, useRouteLoaderData } from "react-router-dom";
+import { Link, useNavigate, useRouteLoaderData } from "react-router-dom";
 import { TailSpin } from "react-loader-spinner";
 import Modal from "../../components/UI/Modal";
 
@@ -8,38 +8,52 @@ const SingleFeed = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const useN = useNavigate();
   function closeModal() {
-      setIsOpen(false)
+    setIsOpen(false);
   }
 
-  function onDelete(){
+  function onDelete() {
     const id = props.data._id.trim();
-    console.log('deleteing');
-
     fetch(`http://localhost:8080/feed/post/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: "Bearer " + token },
-    }).then((response)=>{
-      if (!response.ok) {
-        throw new Error('Error occured')
-      }
-      setIsOpen(false);
-      useN('/')
-    }).catch(err => {
-      console.error(err);
-    })    
+      method: "DELETE",
+      headers: { Authorization: "Bearer " + token },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error occured");
+        }
+        setIsOpen(false);
+        useN("/profile");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   const onDeleteHandler = () => {
     setIsOpen(true);
   };
 
-  const date = new Date(props.data.createdAt).toLocaleString();
+  const createdDate = new Date(props.data.createdAt).toLocaleString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const lastUpdatedDate = new Date(props.data.updatedAt).toLocaleString(
+    "en-US",
+    {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }
+  );
   return (
     <>
-     
       {open && (
         <Modal
-          isOpen={isOpen} onDelete = {onDelete}
+          isOpen={isOpen}
+          onDelete={onDelete}
           closeModal={closeModal}
           title="Delete Confirmation"
           type="confirm"
@@ -47,40 +61,50 @@ const SingleFeed = (props) => {
         />
       )}
 
-      <li className="flex flex-col justify-between bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-        <div className="flex p-2 justify-between items-center  text-gray-500">
-          <span className="bg-blue-500 text-white text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded dark:bg-primary-200 dark:text-primary-800">
-            {/* logo here */}
-            Fitness
+      <li className="flex flex-col space-y-2 rounded-md shadow-md cursor-pointer  dark:bg-dark dark:border-gray-700 border outline-none hover:border-0 hover:ring-2  hover:ring-primary hover:scale-[1.02] transition duration-200 ease-linear ">
+        <Link to={`/post/${props.data._id}`}>
+          <div>
+            <img
+              src={props.data.imageUrl}
+              className="h-[200px] w-full object-center rounded-t-md"
+              alt={props.data._id}
+            />
+          </div>
+        </Link>
+        <div className=" flex gap-2 px-2">
+          <span className="bg-red-500 text-white text-xs inline-flex items-center px-2.5 py-0.5 rounded ">
+            Trending
           </span>
-          <span className="text-sm">{date}</span>
+          <span className="bg-green-500 text-white text-xs inline-flex items-center px-2.5 py-0.5 rounded ">
+            Tech
+          </span>
+          <span className="bg-primary text-white text-xs inline-flex items-center px-2.5 py-0.5 rounded ">
+            Web
+          </span>
         </div>
 
-        <div className="">
-          <img
-            src={props.data.imageUrl}
-            className="h-[230px] w-full"
-            alt={props.data._id}
-          />
+        <div className="p-2">
+          <h2 className=" text-2xl  font-bold  dark:text-zinc-200 ">
+            {props.data.title}
+          </h2>
+
+          <p className=" text-sm  font-light text-left  dark:text-gray-400">
+            {props.data.content.slice(0, 80)}...
+          </p>
         </div>
 
-        <h2 className="mb-2 text-2xl p-2 font-bold  text-gray-900 dark:text-white">
-          <a href="#">{props.data.title}</a>
-        </h2>
+        <div className="flex justify-between items-center p-2">
+          <div className="flex flex-col dark:text-gray-300 capitalize ">
+            {!props.isAuth && (
+              <span>Creator : {props.creator || "Unknown"}</span>
+            )}
 
-        <div className="flex justify-between p-2 items-center">
-          <div className="flex items-center space-x-4">
-            <span className="font-medium dark:text-white capitalize">
-              {props.data.creator.name || "Unknown"}
-            </span>
+            <span className="text-sm">Posted on : {createdDate}</span>
+            {props.isAuth && (
+              <span className="text-sm">Last Update : {lastUpdatedDate}</span>
+            )}
           </div>
           <div className="flex items-center space-x-4">
-            <Link
-              className="text-blue-400 uppercase inline-flex items-center font-medium hover:text-blue-500"
-              to={`/post/${props.data._id}`}
-            >
-              Read
-            </Link>
             {props.isAuth && (
               <>
                 <Link

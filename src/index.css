@@ -3,12 +3,29 @@
 @tailwind components;
 @tailwind utilities;
 
+html{
+  scroll-behavior: smooth;
+}
+::-webkit-scrollbar{
+  width: 10px;
+  background-color: rgb(255, 255, 255);
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: rgba(0, 172, 181, 0.888);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track{
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
 @layer components {
     .btn-primary {
-      @apply py-2 px-5 bg-violet-500 text-white font-semibold shadow-md hover:bg-violet-700 focus:outline-none disabled:bg-gray-500 ;
-    }
+      @apply py-2 px-3 bg-primary text-white font-semibold text-sm shadow-sm rounded-md hover:bg-[#2f9298]  focus:outline-none disabled:bg-gray-500 ;
+    } 
     .inputs{
-        @apply block p-2 text-white border border-violet-500 rounded-md bg-gray-50  focus:border-violet-900 dark:bg-gray-800 dark:border-gray-700
+        @apply w-full block p-2 dark:text-white border border-primary rounded-md bg-gray-50  focus:border-primary dark:bg-dark dark:border-gray-700
     }
   }
 

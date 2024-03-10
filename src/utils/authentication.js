@@ -22,11 +22,10 @@ export async function getUserDetails() {
   if (!token) {
     return redirect("/login")
   }
-  const response = await fetch("http://localhost:8080/feed/user", {
+  const response = await fetch("http://localhost:8080/user", {
     headers: {
-      "Content-Type": "application/json",
       Authorization: "Bearer " + token,
-    },
+    },  
   });
 
   if (!response.ok) {
@@ -34,5 +33,17 @@ export async function getUserDetails() {
   } else {
     const data = await response.json();
     return data.user;
+  }
+}
+
+export async function postInfoLoader({request,params}){
+  const pId = params.postId
+  const response = await fetch("http://localhost:8080/feed/post/"+pId);
+
+  if (!response.ok) {
+    throw new Error("Some error occured");
+  } else {
+    const data = await response.json();
+    return data.post;
   }
 }

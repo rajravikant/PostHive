@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import Header from "../components/Navigation/Header";
-import { Outlet,useLoaderData,useRouteLoaderData} from "react-router";
+import { Outlet,useRouteLoaderData} from "react-router";
 import { useSubmit } from "react-router-dom";
 
 const Root = () => {
   const token = useRouteLoaderData('root');
-  const submit = useSubmit();
+ 
 
-  // ============auto logout ===========
+  // // ============auto logout ===========
   // useEffect(()=>{
   //   if (!token) {
   //     return
@@ -22,10 +22,15 @@ const Root = () => {
   //     submit(null,{action : '/logout'})
   //   },diff)
   // },[token,submit])
+
+
+    useEffect( ()=>{
+     
+    },[])
   return (
     <React.Fragment>
       <Header  />
-      <main className="bg-gray-900 min-h-screen overflow-hidden font-pop">
+      <main className=" bg-primaryL  dark:bg-dark min-h-screen overflow-hidden font-pop">
         <Outlet />
       </main>
     </React.Fragment>

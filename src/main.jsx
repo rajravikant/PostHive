@@ -15,15 +15,15 @@ import SinglePost from "./pages/Post/SinglePost.jsx";
 import EditSinglePost from "./pages/Post/EditSinglePost.jsx";
 import {tokenLoader } from "./utils/authentication.js";
 import { isAuthLoader } from "./utils/authentication.js";
-import { getUserDetails as userLoader } from "./utils/authentication.js";
+import { getUserDetails as userLoader , postInfoLoader as postLoader} from "./utils/authentication.js";
 import { action as logoutAction } from "./utils/Logout.js";
 import Error from "./pages/Error/Error.jsx";
 
-import ProfileEdit from "./pages/Profile/ProfileEdit.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import NewPost from "./pages/Post/NewPost.jsx";
 import UserFeed from "./pages/Feed/UserFeed.jsx";
 import Home from "./pages/Home/Home.jsx";
+import Test from "./pages/test/Test.jsx";
 
 
 
@@ -36,15 +36,15 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login/>} action={loginAction}/>
       <Route path="signup" element={<Signup/>} action={signupAction} />
       <Route path="post/:postId" element = {<SinglePost/>} />
+      <Route path="test" element = {<Test/>} />
+      
 
+      {/* protected routes  */}
 
-      {/* authenticated routes  */}
-
-      <Route path="editProfile" element = {<ProfileEdit/>} loader={userLoader}   />
       <Route path="profile" element = {<Profile/>} loader={userLoader}/>
       <Route path="add-post" element = {<NewPost/>}   />
       <Route path="my-posts" element = {<UserFeed/>}   />
-      <Route path="post/edit/:postId" element = {<EditSinglePost/>}/>
+      <Route path="post/edit/:postId" element = {<EditSinglePost/>} loader={postLoader}/>
       <Route path="logout" action={logoutAction} />
     </Route>
   )

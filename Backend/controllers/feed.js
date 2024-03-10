@@ -10,7 +10,7 @@ exports.getPosts = (req, res, next) => {
     .populate("creator")
     .then((posts) => {
       if (posts.length <= 0) {
-        return res(404).json({message : "No posts found"})
+        return res(404).json({ message: "No posts found" });
       }
       res.status(200).json({
         posts: posts,
@@ -152,24 +152,5 @@ exports.getUsersPost = (req, res, next) => {
     });
 };
 
-exports.getUser = (req,res,next) =>{
-  const id = req.userId;
-  if (!id) {
-    return res.json(404).json({message : 'No User'})
-  }
-  User.findById(id).populate('posts').then((user)=>{
-    if (!user) {
-      return res.json(404).json({message : 'No User'})
-    }
-    res.status(200).json({user : user})
-  }).catch(err =>{
-    throw new Error(err);
-  })
-}
 
 
-exports.updateUser = (req,res,next) =>{
-  const id = req.userId;
-  const updateData = req.body.data;
-  // User.findByIdAndUpdate(id,{}).then((updatedUser))
-}

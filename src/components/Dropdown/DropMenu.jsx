@@ -41,7 +41,7 @@ export default function DropMenu() {
               {({ active }) => (
                 <Link to="/profile"
                   className={`${
-                    active ? "bg-violet-500 text-white" : "text-gray-900"
+                    active ? "bg-[#00ADB5] text-white" : "text-gray-900"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                    <UserCircleIcon className="mr-2 w-5 h-5" />
@@ -50,28 +50,13 @@ export default function DropMenu() {
               )}
             </Menu.Item>
           </div>
-          <div className="px-1 py-1 ">
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  to="/editProfile"
-                  className={`${
-                    active ? "bg-violet-500 text-white" : "text-gray-900"
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                >
-                 
-                  <PencilIcon className="mr-2 w-5 h-5" />
-                  Edit Profile
-                </Link>
-              )}
-            </Menu.Item>
-            </div>
+         
           <div className="px-1 py-1">
             <Menu.Item>
               {({ active }) => (
                 <button
                   className={`${
-                    active ? "bg-violet-500 text-white" : "text-gray-900"
+                    active ? "bg-[#00ADB5] text-white" : "text-gray-900"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   <UserGroupIcon className="mr-2 w-5 h-5" />
@@ -87,7 +72,7 @@ export default function DropMenu() {
                   <button
                     type="submit"
                     className={`${
-                      active ? "bg-blue-500 text-white" : "text-gray-900"
+                      active ? "bg-[#00ADB5] text-white" : "text-gray-900"
                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                   >
                     <PowerIcon className="mr-2 w-5 h-5" />

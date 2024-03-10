@@ -16,26 +16,26 @@ const SignupForm = () => {
   }, [data]);
 
   return (
-    <Form method='put' noValidate>
-    <div className="mb-5">
-      <label
-        htmlFor="username"
-        className="block mb-2 text-sm font-medium text-gray-600"
-      >
-        Name
-      </label>
-      <input
-        type="text"
-        name="username"
-        id="username"
-        required
-        className="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none"
-      />
-    </div>
+    <Form method='put' >
+      <div className="mb-5">
+        <label
+          htmlFor="username"
+          className="block mb-2 text-sm font-medium text-gray-600 dark:text-[#EEEEEE]"
+        >
+          Name
+        </label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          required
+          className='inputs'
+        />
+      </div>
     <div className="mb-5">
       <label
         htmlFor="email"
-        className="block mb-2 text-sm font-medium text-gray-600"
+        className="block mb-2 text-sm font-medium text-gray-600 dark:text-[#EEEEEE]"
       >
         Email
       </label>
@@ -44,14 +44,13 @@ const SignupForm = () => {
         id="email"
         name="email"
         required
-        
-        className="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none"
+        className='inputs'
       />
     </div>
     <div className="mb-5">
       <label
         htmlFor="password"
-        className="block mb-2 text-sm font-medium text-gray-600"
+        className="block mb-2 text-sm font-medium text-gray-600 dark:text-[#EEEEEE]"
       >
         Password
       </label>
@@ -60,28 +59,27 @@ const SignupForm = () => {
         required
         id="password"
         name="password"
-        className="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none"
-
+        className='inputs'
       />
     </div>
     <div className="mb-5">
       <label
         htmlFor="password"
-        className="block mb-2 text-sm font-medium text-gray-600"
+        className="block mb-2 text-sm font-medium text-gray-600 dark:text-[#EEEEEE]"
       >
         Confirm Password
       </label>
       <input
         type="password"
         name="cPass"
-        className="block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none"
+        className='inputs'
       />
     </div>
     {data && isVisble && <p className='text-green-500 border capitalize border-current w-full text-center'>{data.error || 'Error'}</p>}
     
     <button
       type="submit" disabled={isSubmitted}
-      className="w-full p-3 mt-4 bg-indigo-600 text-white rounded shadow"
+      className="w-full p-3 mt-4 bg-primary text-white rounded shadow"
     >
       {isSubmitted ? 'Signing In' : 'Sign Up'}
     </button>

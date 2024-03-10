@@ -59,7 +59,7 @@ const AddPost = () => {
           })
           .then((data) => {
            
-            useN('/my-posts');
+            useN('/');
           })
           .catch((err) => {
             throw new Error(err);
@@ -68,7 +68,7 @@ const AddPost = () => {
   };
 
   return (
-    <section className="mt-20 max-w-[80%] mx-auto  dark:bg-slate-900">
+    <section className="mt-20 max-w-[80%] mx-auto  dark:bg-dark">
           <form
             className="flex justify-center flex-col gap-2 w-full"
             onSubmit={onSubmitHandler}

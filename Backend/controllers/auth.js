@@ -9,13 +9,13 @@ exports.postSignUp = (req, res, next) => {
   const password = req.body.password.trim();
   const valiResult = validationResult(req);
   if (!valiResult.isEmpty()) {
-    return res.status(422).json({error : valiResult.array()[0].msg})
+    return res.status(403).json({error : valiResult.array()[0].msg})
   }
   User.findOne({ email: email })
     .then((found) => {
       if (found) {
         return res
-          .status(422)
+          .status(403)
           .json({ error: "Email already exist"});
       }
       const user = new User({
@@ -30,8 +30,11 @@ exports.postSignUp = (req, res, next) => {
       });
     })
 
-    .catch((err) => {
-      console.error(err);
+    .catch((error) => {
+      const err = new Error(error)
+      err.statusCode = 404;
+      err.message = "Signup failed"
+      next(err)
     });
 };
 exports.postLogin = (req, res, next) => {
@@ -44,7 +47,7 @@ exports.postLogin = (req, res, next) => {
           //adding tokens for authorizing user for the session
           const token = jwt.sign(
             { email: found.email, userId: found._id.toString() },
-            "<'your secret code here>",
+            "secretforever",
             { expiresIn: "1h" }
           );
           res.status(200).json({token : token,userId : found._id.toString()})
@@ -57,5 +60,6 @@ exports.postLogin = (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+      next(err)
     });
 };

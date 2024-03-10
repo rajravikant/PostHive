@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams,useRouteLoaderData } from "react-router-dom";
+import { useParams, useRouteLoaderData } from "react-router-dom";
 import { FallingLines } from "react-loader-spinner";
 const SinglePost = () => {
   const parmas = useParams();
   const [post, setPost] = useState();
-  const [isLoading,setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const token = useRouteLoaderData("root");
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const SinglePost = () => {
       })
       .then((fetchedPost) => {
         setPost(fetchedPost.post);
-        setIsLoading(false)
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -23,41 +23,42 @@ const SinglePost = () => {
 
   return (
     <div className="flex justify-center items-center mx-auto ">
-    {isLoading && <FallingLines visible={true} height="40"/> }
+      {isLoading && <FallingLines visible={true} height="40" color="#00ADB5" />}
       {post && (
-        <article className="mx-auto max-w-2xl dark:format-invert">
-          <header className="mb-4 lg:mb-6 not-format">
-            <address className="flex items-center mb-6 not-italic">
-              <div className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+        <article className="mx-auto max-w-4xl mt-5 ">
+          <header className=" lg:mb-6 not-format">
+            <h1 className=" text-3xl font-extrabold leading-tight text-gray-900  lg:text-4xl dark:text-white">
+              {post.title}
+            </h1>
+            <address className="flex items-center ">
+              <div className="inline-flex items-center  text-[#393E46] dark:text-white">
                 <div>
-                  <a
-                    href="#"
-                    rel="author"
-                    className="text-xl font-bold text-gray-900 dark:text-white"
-                  >
-                    {post.creator.name || 'Unknown'}
+                  <span>Published by </span>
+                  <a href="#" className="text-black font-bold dark:text-white">
+                    {post.creator.name || "Unknown"}
                   </a>
-                  <p className="text-base text-gray-500 dark:text-gray-400">
-                    Graphic Designer, educator & CEO Flowbite
-                  </p>
-                  <p className="text-base text-gray-500 dark:text-gray-400">
+                  <span> at </span>
                     <time>
-                      {new Date(post.createdAt).toLocaleString()}
+                      {new Date(post.createdAt).toLocaleString("en-US", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
                     </time>
-                  </p>
+                 
                 </div>
               </div>
             </address>
-            <h1 className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">
-              {post.title}
-            </h1>
           </header>
-         
+
           <figure>
-            <img src={post.imageUrl} alt="blog-article"/>
-            <figcaption className="text-center text-white font-thin">{post.title}</figcaption>
+            <img src={post.imageUrl} alt="blog-article" />
+            <figcaption className="text-center text-gray-900 dark:text-white ">
+              {post.title}
+            </figcaption>
           </figure>
-          <p className="text-white">{post.content}</p>
+          <p className="dark:text-white pt-5">{post.content}</p>
         </article>
       )}
     </div>
