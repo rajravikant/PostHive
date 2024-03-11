@@ -1,5 +1,5 @@
 
-# Bloggers Space
+# PostHive
 
 Bloggers Space is a personalized blog app where users can write and share blogs with an ease and simple ui .
 Currently project is on early stage of development so it has some bugs and less secure. By the time of deployement this app will be ready to serve in market
