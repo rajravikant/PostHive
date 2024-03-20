@@ -16,20 +16,6 @@ Currently project is on early stage of development so it has some bugs and less 
 **Database:** MongoDB and Moongoose
 
 
-## API Reference
-#### All the api endpoints are defined in backend directory
-
-```
- /feed/posts 
- /feed/posts',feedController.getPosts
- /feed/posts/:userId',feedController.getUsersPost
- /feed/post/:postID',feedController.getSinglePost
- /feed/user',isAuth,feedController.getUser
- /post,isAuth,feedController.putPost
- /post/:postID',isAuth,feedController.updatePost
- /post/:postID',isAuth,feedController.deletePost
- /user',isAuth,feedController.updateUser 
-```
 
 ## Run Locally
 
