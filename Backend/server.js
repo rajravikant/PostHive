@@ -1,31 +1,27 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
-const multer = require("multer");
-const path = require('path')
+
+const path = require("path");
+
+const createHttpError = require ("http-errors")
+const isHttpError = createHttpError.isHttpError;
+const app = express();
 
 const mongoose = require("mongoose");
 require("dotenv").config();
+app.use(cors());
 
 const feedRoutes = require("./routes/feed");
 const authRoutes = require("./routes/auth");
-const userRoutes = require('./routes/user');
+const userRoutes = require("./routes/user");
+
 app.use(express.json());
-app.use(cors());
 
 app.use("/feed", feedRoutes);
 app.use("/auth", authRoutes);
-app.use(userRoutes)
+app.use(userRoutes);
 
-app.use('/images',express.static(path.join(__dirname, "uploads")))
-
-
-
-app.use((error, req, res, next) => {
-  res
-    .status(error.statusCode)
-    .json({ message: error.message || "server error" });
-});
+app.use("/images", express.static(path.join(__dirname, "uploads")));
 
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -35,3 +31,17 @@ mongoose
     });
   })
   .catch((err) => console.error(err));
+
+app.use((req,res,next)=>{
+  next(createHttpError(404,'End Points Not Found'));
+})
+
+app.use((error, req, res, next) => {
+  let errorMessage = 'Internal Server Error';
+  let statusCode = 500;
+  if (isHttpError(error) ||error instanceof Error ) {
+    statusCode = error.status;
+    errorMessage = error.message
+  }
+  res.status(statusCode).json({ error : errorMessage});
+});

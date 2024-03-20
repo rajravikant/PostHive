@@ -2,12 +2,16 @@ import React, { useEffect, useState, Fragment } from "react";
 import SingleFeed from "./SingleFeed";
 import { TailSpin } from "react-loader-spinner";
 import Modal from "../../components/UI/Modal";
-import { useRouteLoaderData } from "react-router-dom";
+import axios from "axios";
+
 
 const AllFeed = () => {
   const [fetchedData, setFetchedData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [page, setPage] = useState(1);
+
   let error = { title: "Error", code: "404" };
 
  const closeModal = () =>{
@@ -16,56 +20,28 @@ const AllFeed = () => {
 
   useEffect(() => {
     async function fetcher() {
-      const response = await fetch("http://localhost:8080/feed/posts");
-      const awaitData = await response.json();
-      if (!response.ok) {
-        error = { title: awaitData.message, code: response.status };
+      const response = await axios.get(`${import.meta.env.VITE_API_URI}/feed/posts?page=${page}`);
+ 
+      if (response.status !== 200) {
         setIsOpen(true);
       }
-      setFetchedData(awaitData.posts);
+      setFetchedData(response.data.posts);
+      setTotalPages(response.data.totalDocs);
       setIsLoading(false);
     }
     fetcher();
 
-  }, []);
+  }, [page]);
 
-  const header = [
-    { id: 1, title: "All" },
-    { id: 2, title: "Sports" },
-    { id: 3, title: "Fitness" },
-    { id: 4, title: "Food" },
-    { id: 6, title: "Adventure" },
-  ];
+ 
 
   return (
     <>
-      <header
-        className="fixed start-0 bg-[#fff]   dark:bg-dark w-full border-b  border-b-slate-300 shadow-sm dark:border-b-slate-300/10 "
-        tabIndex={1}
-      >
-        <ul className="flex justify-center gap-10   py-3">
-          {header.map((item) => (
-            <li
-              className="cursor-pointer text-[#393E46] dark:text-[#EEEEEE] hover:text-primary  transition-all duration-200   "
-              key={item.id}
-            >
-              {item.title}
-            </li>
-          ))}
-        </ul>
-      </header>
-      <section className="bg-white dark:bg-dark pt-20">
+     
+      <section className="bg-white dark:bg-dark pt-2 w-[80%]">
         {/* {user.name && <p className="text-center text-white text-7xl transition ease-in-out delay-150 animate-pulse">{'Welcome '+user.name }</p>} */}
 
-        <div className="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8">
-          <h2 className="mb-4 text-3xl lg:text-6xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-            PostHive Blogs
-          </h2>
-          <p className="font-light text-gray-500 sm:text-xl dark:text-gray-400">
-            We use an agile approach to test assumptions and connect with the
-            needs of your audience early and often.
-          </p>
-        </div>
+      
 
         {isOpen && (
           <Modal
@@ -78,18 +54,37 @@ const AllFeed = () => {
         )}
 
         {isLoading && (
-          <div className="flex justify-center mt-20">
+          <div className="flex justify-center items-center">
             <TailSpin visible={true} height="80" color="#00ADB5" />
           </div>
         )}
 
         {fetchedData && (
-          <div className="py-8 px-40 mx-auto w-full">
-            <ul className="grid gap-2  lg:grid-cols-3   sm:grid-flow-row  list-none w-full">
+          <div className="w-full  pb-5">
+            <ul className="flex gap-5  flex-wrap list-none w-full items-start">
               {fetchedData.map((post) => (
-                <SingleFeed key={post._id} data={post} creator = {post.creator.name} isAuth={false} />
+                <SingleFeed key={post._id} post={post} creator = {post.creator.name} isAuth={false} />
               ))}
             </ul>
+            {/* <Pagination/> */}
+            <div className="flex flex-col items-center py-2">
+      <span className="text-sm text-gray-700 dark:text-gray-400">
+        Showing{" "}
+        <span className="font-semibold text-gray-900 dark:text-white">{page}</span>{" "}
+        of{" "}
+        <span className="font-semibold text-gray-900 dark:text-white">{totalPages}</span>{" "}
+        
+      </span>
+
+      <div className="inline-flex mt-2 xs:mt-0">
+        <button  onClick={()=>setPage(prev => prev-1)}  disabled={page <= 1}   className="flex items-center justify-center disabled:bg-gray-500 px-3 h-8 text-sm font-medium text-white  bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ">
+          Prev
+        </button>
+        <button onClick={()=>setPage(prev => prev+1)} disabled={page >= totalPages}  className="flex items-center justify-center disabled:bg-gray-500 px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          Next
+        </button>
+      </div>
+    </div>
           </div>
         )}
       </section>

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 # PostHive
 
@@ -50,3 +51,5 @@ for server
   npm start 
 ```
 
+=======
+>>>>>>> Stashed changes

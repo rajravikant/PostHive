@@ -1,128 +1,159 @@
 import React, { useState, useRef } from "react";
-import { redirect, useRouteLoaderData,useNavigate,useNavigation } from "react-router-dom";
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import toast, { Toaster } from "react-hot-toast";
+
+import {
+  useRouteLoaderData,
+  useNavigate,
+  useNavigation,
+  
+} from "react-router-dom";
+import axios from "axios";
+
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+    ["link", "image"],
+    ["clean"],
+  ],
+};
+
+const formats = [
+  "header",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
+];
+
 const AddPost = () => {
   const token = useRouteLoaderData("root");
-  const useN = useNavigate();
-  const navigation = useNavigation();
-  const isSubmitted = navigation.state === 'submitting'
-  const [data, setData] = useState({
-    title: "",
-    content: "",
-    imageUrl: "",
-  });
+  const navigate = useNavigate();
+  const titleRef = useRef();
+  const [value, setValue] = useState("");
+  const [image, setImage] = useState();
 
-  const titleChangeHandler = (e) => {
-    setData((prev) => {
-      return {
-        ...prev,
-        title: e.target.value,
-      };
-    });
-  };
- 
-  const contentChangeHandler = (e) => {
-    setData((prev) => {
-        return {
-          ...prev,
-          content: e.target.value,
-        };
-      });
-  };
-  const imageChangeHandler = (e) => {
-    setData((prev) => {
-        return {
-          ...prev,
-          imageUrl: e.target.value,
-        };
-      });
-  };
 
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    const sendData = {
-        title: data.title,
-        content: data.content,
-        imageUrl: data.imageUrl,
-    }
-
-        fetch("http://localhost:8080/feed/post", {
-          method: "POST",
-          headers: { 
-             "Content-Type": "application/json",  
-             Authorization : 'Bearer '+token
-          },
-          body: JSON.stringify(sendData),
-        })
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-           
-            useN('/');
-          })
-          .catch((err) => {
-            throw new Error(err);
-          });
+  const onSubmitHandler = async (e) => {
   
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", titleRef.current.value);
+    formData.append("imageUrl", image);
+    formData.append("content", value);
+
+   
+    const response = axios
+      .post(`${import.meta.env.VITE_API_URI}/feed/post`, formData, {
+        headers: { Authorization: "Bearer " + token },
+      })
+      .then((res) => {
+        if (res.status !== 201) {
+          console.error(res.data.error);
+        }
+        if (res.status === 201) {
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        toast.error(err.response.data.error,{icon:"❌"});
+      });
+
+      toast.promise(
+        response,
+        {
+          loading: 'Posting',
+          success: (data) => `Successfully saved ${data.message}`,
+          error: (err) => `This just happened: ${err.toString()}`,
+        },
+        {
+          style: {
+            minWidth: '250px',
+          },
+          success: {
+            duration: 5000,
+            icon: '🔥',
+          },
+          error: {
+            duration: 5000,
+            icon: '❌',
+          },
+        }
+      );
+      
   };
 
   return (
-    <section className="mt-20 max-w-[80%] mx-auto  dark:bg-dark">
-          <form
-            className="flex justify-center flex-col gap-2 w-full"
-            onSubmit={onSubmitHandler}
-          >
-            <input
-              type="text"
-              onChange={titleChangeHandler}
-              name="title"
-              placeholder="title"
-              className="inputs"
-              required
-            />
-            <input
-              type="text" onChange={imageChangeHandler}
-              name="imageUrl"
-              placeholder="image url"
-              className="inputs"
-              required
-            />
+    <section className="pt-5 max-w-[80%] mx-auto  dark:bg-dark">
+      <Toaster />
+      <form
+        className="flex justify-center flex-col gap-2 w-full"
+        onSubmit={onSubmitHandler}
+      >
+        <label
+          htmlFor="title"
+          className="block text-sm font-medium leading-6 dark: text-white"
+        >
+          Title
+        </label>
+        <input
+          type="text"
+          id="title"
+          ref={titleRef}
+          name="title"
+          placeholder="title"
+          className="inputs"
+          required
+        />
 
-            <div className="">
-                <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-white">
-                  or
-                </label>
-                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-500 px-6 py-10">
-                  <div className="text-center">
-                    <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                    <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                      <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer px rounded-md bg-blue-400 font-semibold text-white focus-within:outline-none  hover:text-indigo-500"
-                      >
-                        <span className="p-1">Upload a file</span>
-                        <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                      </label>
-                      <p className="pl-1">or drag and drop</p>
-                    </div>
-                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                  </div>
-                </div>
-              </div>
+        <label
+          htmlFor="imageUrl"
+          className="block text-sm font-medium leading-6 dark: text-white"
+        >
+          Upload a file
+        </label>
+        <input
+          id="imageUrl"
+          name="imageUrl"
+          type="file" className="inputs"
+          onChange={(e) => setImage(e.target.files[0])}
+          accept="image/png, image/jpeg"
+        />
 
-            <textarea
-              name="content" onChange={contentChangeHandler}
-              placeholder="content here"
-              className="inputs min-h-48"
-              required
-            ></textarea>
-            <button type="submit" className="btn-primary">
-            {isSubmitted ? 'Posting' : 'Post'}
-            </button>
-          </form>
+        <label
+          htmlFor="content"
+          className="block text-sm font-medium leading-6 dark:text-white"
+        >
+          Content
+        </label>
+
+        <ReactQuill
+          theme="snow"
+          value={value}
+          onChange={(e) => setValue(e)}
+          id="content"
+          className="dark:text-white"
+          modules={modules}
+          formats={formats}
+        />
+
+        <button type="submit" className="btn-primary">Post</button>
+      </form>
     </section>
   );
 };
-
 export default AddPost;

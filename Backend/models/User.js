@@ -10,10 +10,12 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
+      select :false,
     },
     password: {
       type: String,
       required: true,
+      select :false,
     },
     status: {
       type: String,

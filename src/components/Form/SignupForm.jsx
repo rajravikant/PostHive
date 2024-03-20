@@ -76,13 +76,27 @@ const SignupForm = () => {
       />
     </div>
     {data && isVisble && <p className='text-green-500 border capitalize border-current w-full text-center'>{data.error || 'Error'}</p>}
-    
-    <button
-      type="submit" disabled={isSubmitted}
-      className="w-full p-3 mt-4 bg-primary text-white rounded shadow"
-    >
-      {isSubmitted ? 'Signing In' : 'Sign Up'}
-    </button>
+      <div className="buttons  mt-4 divide-y divide-gray-300 dark:divide-gray-700 ">
+        <div className='py-3'>
+        <button
+          type="submit" disabled={isSubmitted}
+          className="w-full p-3 bg-primary text-white rounded shadow"
+        >
+          {isSubmitted ? 'Signing In' : 'Sign Up'}
+        </button>
+
+        </div>
+      <div className='py-3 inline-flex justify-center items-center w-full'>
+        <button
+          type="submit" disabled={isSubmitted}
+          className="p-3  bg-red-500 text-white rounded shadow"
+        >
+          Login With Google
+        </button>
+
+      </div>
+
+      </div>
   </Form>
   )
 }

@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Header from "../components/Navigation/Header";
-import { Outlet,useRouteLoaderData} from "react-router";
-import { useSubmit } from "react-router-dom";
+import { Outlet} from "react-router";
 
+import useMagneticHover from '../utils/useMagneticHover'
+import Footer from "../components/Navigation/Footer";
 const Root = () => {
-  const token = useRouteLoaderData('root');
+
+  useMagneticHover();
  
 
   // // ============auto logout ===========
@@ -24,15 +26,15 @@ const Root = () => {
   // },[token,submit])
 
 
-    useEffect( ()=>{
-     
-    },[])
+   
+  
   return (
     <React.Fragment>
-      <Header  />
-      <main className=" bg-primaryL  dark:bg-dark min-h-screen overflow-hidden font-pop">
+      <Header/>
+      <main className="bg-primaryL dark:bg-dark min-h-screen font-pop">
         <Outlet />
       </main>
+      <Footer/>
     </React.Fragment>
   );  
 };

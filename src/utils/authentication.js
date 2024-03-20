@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom";
-
+import axios from "axios";
 export function getAuthToken() {
   const token = localStorage.getItem("token");
   return token;
@@ -22,23 +22,23 @@ export async function getUserDetails() {
   if (!token) {
     return redirect("/login")
   }
-  const response = await fetch("http://localhost:8080/user", {
+  const response = await axios.get(`${import.meta.env.VITE_API_URI}/user`, {
     headers: {
       Authorization: "Bearer " + token,
     },  
-  });
+  })
 
-  if (!response.ok) {
+  if (response.status === 404) {
     throw new Error("Some error occured");
-  } else {
-    const data = await response.json();
-    return data.user;
+  } else { 
+    return response.data.user;
   }
 }
 
+
 export async function postInfoLoader({request,params}){
   const pId = params.postId
-  const response = await fetch("http://localhost:8080/feed/post/"+pId);
+  const response = await fetch(`${import.meta.env.VITE_API_URI}/feed/post/`+pId);
 
   if (!response.ok) {
     throw new Error("Some error occured");
@@ -47,3 +47,5 @@ export async function postInfoLoader({request,params}){
     return data.post;
   }
 }
+
+

@@ -4,12 +4,12 @@ import { Link, redirect } from "react-router-dom";
 import SignupForm from "../../components/Form/SignupForm";
 const Signup = () => {
   return (
-    <div className="container mx-auto flex">
+    <div className="container mx-auto flex lg:p-0 p-5">
       <div className="max-w-md w-full mx-auto">
         <h1 className="text-4xl text-center mb-9 dark:text-white font-bold">
           Sign Up
         </h1>
-        <div className="bg-white rounded-md overflow-hidden shadow-md  dark:bg-dark border dark:border-gray-700">
+        <div className="bg-white rounded-md overflow-hidden shadow-sm  dark:bg-dark border dark:border-gray-700">
           <div className="p-8">
             <SignupForm />
           </div>
@@ -42,7 +42,7 @@ export async function action({ request, params }) {
     confirmPassword,
   };
 
-  const response = await fetch("http://localhost:8080/auth/signup", {
+  const response = await fetch(`${import.meta.env.VITE_API_URI}/auth/signup`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -51,10 +51,9 @@ export async function action({ request, params }) {
   });
   const result = await response.json();
 
-  if (response.status === 403) {
+  if (!response.ok) {
     return result;
   } 
-  console.log(response);
-  return redirect('/');
+  return redirect('/login');
   
 }

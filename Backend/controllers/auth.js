@@ -1,65 +1,78 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const {validationResult} = require('express-validator')
-
+const bycrypt = require("bcrypt");
+const { validationResult } = require("express-validator");
+const createHttpError = require("http-errors");
 
 exports.postSignUp = (req, res, next) => {
-  const name = req.body.name.trim();
-  const email = req.body.email.trim();
-  const password = req.body.password.trim();
+  const { name, email, password } = req.body;
   const valiResult = validationResult(req);
   if (!valiResult.isEmpty()) {
-    return res.status(403).json({error : valiResult.array()[0].msg})
+    return next(createHttpError(416, valiResult.array()[0].msg));
   }
   User.findOne({ email: email })
     .then((found) => {
       if (found) {
-        return res
-          .status(403)
-          .json({ error: "Email already exist"});
+        return next(createHttpError(409, "Email already in use"));
       }
-      const user = new User({
-        name: name,
-        email: email,
-        password: password,
-      });
-      return user.save().then((result) => {
-        res
-          .status(201)
-          .json({ message: "user created succesfully you may login", userId: result._id });
+      return bycrypt.hash(password, 12).then((hasedPassword) => {
+        const user = new User({
+          name: name,
+          email: email,
+          password: hasedPassword,
+        });
+        return user.save().then((result) => {
+          res.status(201).json({
+            message: "user created succesfully you may login",
+            userId: result._id,
+          });
+        });
       });
     })
-
-    .catch((error) => {
-      const err = new Error(error)
-      err.statusCode = 404;
-      err.message = "Signup failed"
-      next(err)
-    });
+    .catch((err) => next(err));
 };
+
 exports.postLogin = (req, res, next) => {
-  const email = req.body.email.trim();
-  const password = req.body.password.trim();
+  const { email, password } = req.body;
+  const valiResult = validationResult(req);
+  if (!valiResult.isEmpty()) {
+    return next(createHttpError(406, valiResult.array()[0].msg));
+  }
   User.findOne({ email: email })
-    .then((found) => {
-      if (found) {
-        if (password === found.password) {
-          //adding tokens for authorizing user for the session
+    .select("+password +email")
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ error: "No account exits!" });
+      }
+      bycrypt.compare(password, user.password).then((doMatch) => {
+        if (doMatch) {
           const token = jwt.sign(
-            { email: found.email, userId: found._id.toString() },
+            { email: user.email, userId: user._id.toString() },
             "secretforever",
             { expiresIn: "1h" }
           );
-          res.status(200).json({token : token,userId : found._id.toString()})
+          return res.status(200).json({
+            token: token,
+            userId: user._id.toString(),
+          });
         } else {
-          return res.status(401).json({ message: "Wrong Password" });
+          return next(createHttpError(401, "wrong password"));
         }
-      } else {
-        return res.status(401).json({ message: "No account exist create one" });
-      }
+      });
     })
     .catch((err) => {
-      console.error(err);
-      next(err)
+      next(err);
     });
 };
+
+// if (password === found.password) {
+//   //adding tokens for authorizing user for the session
+//   const token = jwt.sign(
+//     { email: found.email, userId: found._id.toString() },
+//     "secretforever",
+//     { expiresIn: "1h" }
+//   );
+//   res.status(200).json({ token: token, userId: found._id.toString() });
+// } else {
+//   return next(createHttpError(401, "wrong password"));
+// }

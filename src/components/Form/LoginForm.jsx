@@ -4,6 +4,7 @@ const LoginForm = () => {
   const navigation = useNavigation();
   const isSubmitted = navigation.state === 'submitting'
   const data = useActionData();
+
   const [isVisble,setIsVisible] = useState()
     useEffect(() => {
     setIsVisible(true)
@@ -28,7 +29,6 @@ const LoginForm = () => {
           type="email"
           id="email" name="email"
           className="inputs"
-          required
         />
       </div>
       <div className="mb-5">
@@ -42,10 +42,9 @@ const LoginForm = () => {
           type="password"
           id="password" name="password"
           className="inputs"
-          required
         />
       </div>
-      {/* {data && isVisble && <p className="text-red-500"> {data}</p>} */}
+      {data && isVisble && <p className="text-red-500"> {data.data.error}</p>}
       <button
         type="submit"
         className="w-full p-3 mt-4 bg-primary text-white rounded shadow"

@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
   NavLink,
-  useNavigate,
   useRouteLoaderData,
-  Link,
 } from "react-router-dom";
 import DropMenu from "../Dropdown/DropMenu";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
 
-// const navItems = [
-//   { id: "feed", text: "Feed", link: "/",  },
-//   { id: "login", text: "Login", link: "/login" },
-//   { id: "signup", text: "Signup", link: "/signup"},
-// ];
 
 const Header = () => {
   const token = useRouteLoaderData("root");
@@ -46,7 +39,7 @@ const Header = () => {
   return (
     <nav
       tabIndex={-1}
-      className=" bg-white sticky top-0 i font-pop z-40 w-full backdrop-blur flex flex-row justify-between items-center border-b  border-slate-300  py-2 dark:border-slate-900/10 dark:bg-darkL"
+      className=" bg-white sticky top-0  font-pop z-40 w-full backdrop-blur flex flex-row lg:justify-between justify-center  items-center border-b  border-slate-300  py-2 dark:border-slate-900/10 dark:bg-darkL "
     >
       <div className="px-5">
         <NavLink to="/">
@@ -79,6 +72,16 @@ const Header = () => {
             }
           >
             Blogs
+          </NavLink>
+        </li>
+        <li className="mx-3">
+          <NavLink
+            to="/authors"
+            className={({ isActive }) =>
+              isActive ? "text-primary " : "text-[#393E46] dark:text-[#EEEEEE]"
+            }
+          >
+            Authors
           </NavLink>
         </li>
         {!token && (

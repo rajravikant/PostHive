@@ -15,13 +15,24 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
+    category: {
+      type: String,
+      required: true,
+    },
     creator: {
       type: Schema.Types.ObjectId,
-      ref : 'User',
+      ref: "User",
       required: true,
-    }
+    },
+    comments: [
+      {
+        user: { type: Schema.Types.ObjectId, ref: "User",required : true },
+        comment: { type: String,required : true },
+        commentedAt: { type: Schema.Types.Date,required : true },
+      },
+    ],
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Post',postSchema);
+module.exports = mongoose.model("Post", postSchema);
